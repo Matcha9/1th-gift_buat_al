@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kesan & Pesan 💌</title>
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI",sans-serif;
+  background:linear-gradient(135deg,#76a7ff,#b7e3ff);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+/* efek buku kebuka */
+.container{
+  background:#ffffffee;
+  width:88%;
+  max-width:420px;
+  padding:22px;
+  border-radius:24px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+  animation:openBook .9s ease;
+  transform-origin:left;
+}
+
+@keyframes openBook{
+  0%{transform:rotateY(-70deg);opacity:0}
+  100%{transform:rotateY(0);opacity:1}
+}
+
+h2{
+  margin-top:0;
+  text-align:center;
+  color:#003d8d;
+}
+
+input,textarea{
+  width:100%;
+  padding:12px;
+  border-radius:14px;
+  border:2px solid #7ab5ff;
+  outline:none;
+  font-size:14px;
+  margin-bottom:12px;
+  box-sizing:border-box;
+}
+
+textarea{
+  height:150px;
+  resize:none;
+}
+
+.btn-area{
+  display:flex;
+  gap:10px;
+}
+
+.btn-area button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:14px;
+  font-weight:bold;
+  font-size:14px;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.save{background:#76bfff;}
+.view{background:#ffd86b;}
+.back{background:#ff8d8d;}
+
+.btn-area button:active{
+  transform:scale(.92);
+}
+
+/* animasi save */
+.saved{
+  animation:pop .4s ease;
+}
+
+@keyframes pop{
+  0%{transform:scale(.7)}
+  80%{transform:scale(1.1)}
+  100%{transform:scale(1)}
+}
+
+/* popup berhasil */
+.toast{
+  position:fixed;
+  bottom:30px;
+  background:#4caf50;
+  color:white;
+  padding:10px 18px;
+  border-radius:20px;
+  font-size:14px;
+  opacity:0;
+  transition:.4s;
+}
+.toast.show{opacity:1}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>Kesan & Pesan Untuk Kamu 💙</h2>
+
+  <input id="judul" placeholder="Judul pesan 💌">
+  <textarea id="pesan" placeholder="Tulis kesan & pesan di sini yaa..."></textarea>
+
+  <div class="btn-area">
+    <button class="save" onclick="savePesan(this)">💾 Save</button>
+    <button class="view" onclick="goRiwayat()">📖 Lihat</button>
+    <button class="back" onclick="backToMenu()">⬅️</button>
+  </div>
+</div>
+
+<div class="toast" id="toast">💖 Pesan tersimpan</div>
+
+<script>
+function savePesan(btn){
+  let judul=document.getElementById("judul").value.trim();
+  let text=document.getElementById("pesan").value.trim();
+
+  if(judul===""||text===""){
+    alert("Judul & pesan harus diisi ya 💙");
+    return;
+  }
+
+  let data=JSON.parse(localStorage.getItem("pesanPacar"))||[];
+  data.push({judul,text});
+  localStorage.setItem("pesanPacar",JSON.stringify(data));
+
+  document.getElementById("judul").value="";
+  document.getElementById("pesan").value="";
+
+  btn.classList.add("saved");
+  setTimeout(()=>btn.classList.remove("saved"),400);
+
+  let toast=document.getElementById("toast");
+  toast.classList.add("show");
+  setTimeout(()=>toast.classList.remove("show"),1800);
+}
+
+function goRiwayat(){
+  window.location.href="riwayat_pesan.html";
+}
+
+function backToMenu(){
+  window.location.href="gameboy.html";
+}
+</script>
+
+</body>
+</html>

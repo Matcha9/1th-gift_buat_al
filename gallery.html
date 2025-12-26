@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Gallery 💕</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Poppins, Arial, sans-serif;
+  background:linear-gradient(#e0f0ff,#ffe4ec);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+
+/* hiasan */
+.decor{
+  position:absolute;
+  font-size:22px;
+  opacity:.7;
+  animation: float 6s infinite ease-in-out;
+}
+.decor:nth-child(1){top:10%;left:8%;}
+.decor:nth-child(2){top:18%;right:10%;}
+.decor:nth-child(3){bottom:20%;left:12%;}
+.decor:nth-child(4){bottom:15%;right:8%;}
+
+@keyframes float{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-14px)}
+}
+
+.container{
+  width:92%;
+  max-width:380px;
+  background:white;
+  border-radius:26px;
+  padding:18px;
+  border:3px solid #ffb6c1;
+  box-shadow:0 20px 40px rgba(0,0,0,.2);
+  z-index:2;
+}
+
+h2{
+  text-align:center;
+  margin:6px 0 14px;
+  color:#444;
+}
+
+.photobox{
+  background:#fff0f6;
+  border-radius:22px;
+  padding:18px;
+  border:2px solid #ffc0cb;
+}
+
+.polaroid{
+  background:white;
+  padding:10px 10px 20px;
+  border-radius:12px;
+  box-shadow:0 12px 25px rgba(0,0,0,.25);
+}
+
+.polaroid img{
+  width:100%;
+  height:240px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.caption{
+  text-align:center;
+  margin-top:10px;
+  font-size:13px;
+  color:#ff69b4;
+}
+
+.status{
+  text-align:center;
+  font-size:12px;
+  margin:12px 0;
+  color:#777;
+}
+
+.buttons{
+  display:flex;
+  gap:8px;
+  margin-top:16px;
+}
+
+.buttons button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:16px;
+  font-weight:700;
+  color:white;
+  background:linear-gradient(135deg,#ff9eb5,#ff6fa1);
+  box-shadow:0 8px 18px rgba(255,105,180,.45);
+}
+</style>
+</head>
+
+<body>
+
+<div class="decor">💖</div>
+<div class="decor">✨</div>
+<div class="decor">🌸</div>
+<div class="decor">⭐</div>
+
+<div class="container">
+  <h2>Our Memories 📸</h2>
+
+  <div class="photobox">
+    <div class="polaroid">
+      <img id="photo" src="all_1.jpg">
+      <div class="caption">with you is my favorite place 💕</div>
+    </div>
+
+    <div class="status">
+      Photo <span id="count">1</span> / 20
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="prev()">KEMBALI</button>
+    <button onclick="backMenu()">BACK TO MENU 🎮</button>
+    <button onclick="next()">SELANJUTNYA</button>
+  </div>
+</div>
+
+<script>
+const photos = [
+  "all_1.jpg","all_2.jpg","all3.jpg","lvl_1.jpg",
+  "lvl_2.jpg","lvl_3.jpg","lvl_4.jpg","lvl_5.jpg",
+  "lvl_6.jpg","lvl_7.jpg","ell_1.jpg","ell_2.jpg",
+  "ell_3.jpg","ell_4.jpg","ell_5.jpg","ch_1.jpg",
+  "ch_2.png","ch_3.jpg","ch_4.jpg","all_4.jpg"
+];
+
+let i = 0;
+const img = document.getElementById("photo");
+const count = document.getElementById("count");
+
+function update(){
+  img.src = photos[i];
+  count.innerText = i + 1;
+}
+
+function next(){
+  if(i < photos.length - 1){
+    i++;
+    update();
+  }
+}
+
+function prev(){
+  if(i > 0){
+    i--;
+    update();
+  }
+}
+
+function backMenu(){
+  window.location.href = "gameboy.html";
+}
+</script>
+
+</body>
+</html>

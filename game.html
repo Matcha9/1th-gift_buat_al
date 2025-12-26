@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tetris For You 💗</title>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffd1e8, #a9c8ff);
+  }
+
+  #polaroid {
+    background: #fff;
+    padding: 25px 15px 50px;
+    border-radius: 18px;
+    width: 360px;
+    box-shadow: 0 0 20px rgba(255,182,215,0.7), 0 6px 0 #ffc5dd;
+    border: 6px solid #ffb8d9;
+    text-align: center;
+  }
+
+  h2 {
+    color:#ff4fa5;
+    margin-bottom: 8px;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  #game-container {
+    background: rgba(255,255,255,0.7);
+    border-radius: 14px;
+    padding: 10px;
+    border: 3px dashed #ff8ec2;
+  }
+
+  canvas {
+    background: #111;
+    margin: auto;
+    display: block;
+    border-radius: 10px;
+    border: 3px solid #ffa6d0;
+  }
+
+  .controls {
+    margin-top: 12px;
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .btn {
+    background: #ffd6eb;
+    border: none;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    color:#444;
+    box-shadow: 0 0 8px rgba(255,182,215,0.6);
+  }
+  .btn:active { transform: scale(0.90); }
+
+  #backBtn {
+    margin-top: 18px;
+    width: 100%;
+    background: #ff7fb0;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  /* ===== GAME OVER UI REVISI ===== */
+  #gameOverScreen {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgba(255,182,215,0.85), rgba(169,200,255,0.85));
+    backdrop-filter: blur(6px);
+  }
+
+  #gameOverBox {
+    background: #fff;
+    width: 280px;
+    padding: 25px 15px 25px;
+    border-radius: 18px;
+    text-align: center;
+    border: 6px solid #ffb8d9;
+    box-shadow: 0 0 20px rgba(255,182,215,0.9), 0 6px 0 #ffc5dd;
+  }
+
+  #gameOverBox h3 {
+    font-size: 20px;
+    color: #ff4fa5;
+    margin-bottom: 12px;
+    font-weight: 700;
+  }
+
+  #gameOverBox p {
+    font-size: 13px;
+    color: #333;
+    margin-bottom: 18px;
+    line-height: 1.4rem;
+  }
+
+  #gameOverBox button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 6px 0;
+    background: #ffd6eb;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    color: #444;
+    font-size: 15px;
+    box-shadow: 0 0 8px rgba(255,182,215,0.6);
+  }
+
+  #gameOverBox button:active {
+    transform: scale(0.92);
+  }
+</style>
+</head>
+<body>
+
+<div id="polaroid">
+<h2>Mini Tetris 💗</h2>
+<div id="game-container">
+<canvas id="tetris" width="240" height="400"></canvas>
+</div>
+
+<div class="controls">
+  <button class="btn" onclick="moveLeft()">←</button>
+  <button class="btn" onclick="rotate()">⟳</button>
+  <button class="btn" onclick="moveRight()">→</button>
+</div>
+<button class="btn" style="margin-top:10px;" onclick="drop()">⬇ Turun</button>
+<button id="backBtn" class="btn" onclick="window.location.href='gameboy.html'">Kembali</button>
+</div>
+
+<!-- 🌸 GAME OVER SCREEN -->
+<div id="gameOverScreen">
+  <div id="gameOverBox">
+    <h2>💔 GAME OVER 💔</h2>
+    <h3> TAPII INGETT YAAA!!</h3>
+    <p> walaupun kamu kalah tapi kamu selalu jadi pemenang di hati aku, kamu punya aku dan aku punya kamu sekarang dan selamanya...<br>
+    I LOVEE UU MOREEEE 💗</p>
+
+    <button onclick="location.reload()">🔄 Replay</button>
+    <button onclick="window.location.href='gameboy.html'">🏠 Back to Menu</button>
+  </div>
+</div>
+
+<!-- 🎶 BACKGROUND MUSIC -->
+<audio id="bgm" loop autoplay>
+  <source src="https://cdn.pixabay.com/download/audio/2021/10/19/audio_f695d04e84.mp3?filename=romantic-piano-melody-110624.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const canvas=document.getElementById("tetris");
+const context=canvas.getContext("2d");
+context.scale(20,20);
+
+const arena=Array.from({length:20},()=>Array(12).fill(0));
+const pieces="TOLJISZ";
+const colors=[null,"#ffb3e6","#c7b3ff","#a3c7ff","#b3ffd9","#ffe0b3","#ffb3b3","#ffb3d9"];
+
+let isGameOver=false;
+const bgm=document.getElementById("bgm");
+
+function draw(){
+  context.fillStyle="#111";
+  context.fillRect(0,0,240,400);
+  arena.forEach((row,y)=>row.forEach((v,x)=>{if(v){context.fillStyle=colors[v];context.fillRect(x,y,1,1);}}));
+  player.matrix.forEach((row,y)=>row.forEach((v,x)=>{if(v){context.fillStyle=colors[v];context.fillRect(player.pos.x+x,player.pos.y+y,1,1);}}));
+}
+
+function createPiece(type){
+  const p={T:[[0,1,0],[1,1,1],[0,0,0]],O:[[2,2],[2,2]],L:[[0,3,0],[0,3,0],[0,3,3]],J:[[0,4,0],[0,4,0],[4,4,0]],I:[[5,5,5,5]],S:[[0,6,6],[6,6,0]],Z:[[7,7,0],[0,7,7]]};
+  return p[type];
+}
+
+function collide(arena,player){
+  return player.matrix.some((row,y)=>
+    row.some((v,x)=>v!==0 && (arena[y+player.pos.y] && arena[y+player.pos.y][x+player.pos.x])!==0)
+  );
+}
+
+function merge(arena,player){
+  player.matrix.forEach((row,y)=>row.forEach((v,x)=>{if(v)arena[y+player.pos.y][x+player.pos.x]=v;}));
+  if(arena[0].some(c=>c!==0)) gameOver();
+}
+
+function resetPlayer(){
+  player.matrix=createPiece(pieces[Math.random()*pieces.length|0]);
+  player.pos.y=0;
+  player.pos.x=(12/2|0)-(player.matrix[0].length/2|0);
+  if(collide(arena,player)) gameOver();
+}
+
+function gameOver(){
+  isGameOver=true;
+  bgm.pause();
+  document.getElementById("gameOverScreen").style.display="flex";
+}
+
+function drop(){
+  if(isGameOver) return;
+  player.pos.y++;
+  if(collide(arena,player)){
+    player.pos.y--;
+    merge(arena,player);
+    resetPlayer();
+  }
+}
+
+function moveLeft(){ if(!isGameOver){player.pos.x--; if(collide(arena,player))player.pos.x++;}}
+function moveRight(){ if(!isGameOver){player.pos.x++; if(collide(arena,player))player.pos.x--;} }
+function rotate(){
+  if(isGameOver) return;
+  const m=player.matrix.map((_,i)=>m.map(r=>r[i])).reverse();
+  player.matrix=m;
+  if(collide(arena,player)) player.matrix.reverse();
+}
+
+const player={pos:{x:5,y:5},matrix:null};
+resetPlayer();
+
+let lastTime=0;let dropCounter=0;
+function update(time=0){
+  if(isGameOver) return;
+  const delta=time-lastTime; lastTime=time; dropCounter+=delta;
+  if(dropCounter>600){ drop(); dropCounter=0; }
+  draw(); requestAnimationFrame(update);
+}
+update();
+</script>
+
+</body>
+</html>

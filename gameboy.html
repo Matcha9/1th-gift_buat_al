@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Anniversary Console 💙</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(135deg, #8ec5ff, #dbeafe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Courier New', monospace;
+    }
+
+    .gameboy {
+      width: 350px;
+      background: #cfe8ff;
+      border-radius: 30px;
+      padding: 18px;
+      box-shadow: inset 0 0 0 4px #9ecbff,
+                  0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    .screen {
+      background: #eaf4ff;
+      border-radius: 15px;
+      padding: 15px;
+      border: 3px solid #7fb2ff;
+      height: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .screen h2 {
+      color: #2563eb;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+    }
+
+    .screen p {
+      font-size: 13px;
+      color: #1f2937;
+    }
+
+    .menu {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 12px;
+      border-radius: 14px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 12px;
+      font-size: 11px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="gameboy">
+
+    <div class="screen">
+      <h2>ANNIVERSARY</h2>
+      <p>Choose menu 💙</p>
+    </div>
+
+    <div class="menu">
+      <button class="btn" onclick="location.href='letter.html'">💌 MESSAGE</button>
+      <button class="btn" onclick="location.href='gallery.html'">📸 GALLERY</button>
+      <button class="btn" onclick="location.href='music.html'">🎵 MUSIC</button>
+      <button class="btn" onclick="location.href='game.html'">🎮 GAME</button>
+      <button class="btn" onclick="location.href='kesan_pesan.html'" style="grid-column: span 2;">
+        📝  PESAN UNTUK KITA
+      </button>
+    </div>
+
+    <div class="footer">
+      1st Anniversary • with love 💙
+    </div>
+
+  </div>
+
+</body>
+</html>
